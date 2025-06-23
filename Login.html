@@ -1,101 +1,204 @@
-   <!DOCTYPE html>
-   <html lang="en">
-   <head>
-       <meta charset="UTF-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>CA Document Management System</title>
-       <link rel="stylesheet" href="style.css">
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   </head>
-   <body>
-       <header>
-           <h1><i class="fas fa-file-alt"></i> CA Document Repository</h1>
-           <p>Store and manage all your Chartered Accountant documents in one place</p>
-       </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CA Document Management System</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your external CSS file -->
+    <style>
+        /* Background Styles */
+        body {
+            background: url('login_bg.jpg') no-repeat center center fixed; /* Background image */
+            background-size: cover; /* Cover the entire background */
+            height: 100vh; /* Full height */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-       <main>
-           <section class="document-form">
-               <h2>Add New Document</h2>
-               <form id="documentForm">
-                   <div class="form-group">
-                       <label for="docType">Document Type:</label>
-                       <select id="docType" required>
-                           <option value="">Select document type</option>
-                           <option value="DIR-12">DIR-12 (Appointment of Director)</option>
-                           <option value="MGT-14">MGT-14 (Resolutions)</option>
-                           <option value="INC-22">INC-22 (Registered Office)</option>
-                           <option value="AOC-4">AOC-4 (Financial Statements)</option>
-                           <option value="OTHER">Other Documents</option>
-                       </select>
-                   </div>
+        /* Preloader Styles */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
 
-                   <div class="form-group">
-                       <label for="clientName">Client/Company Name:</label>
-                       <input type="text" id="clientName" required>
-                   </div>
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
 
-                   <div class="form-group">
-                       <label for="docDate">Document Date:</label>
-                       <input type="date" id="docDate" required>
-                   </div>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-                   <div class="form-group">
-                       <label for="docFile">Upload Document:</label>
-                       <input type="file" id="docFile" accept=".pdf,.doc,.docx,.xls,.xlsx" required>
-                   </div>
+        /* Auth Container Styles */
+        #auth-container {
+            max-width: 400px; /* Limit width */
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9); /* White background with transparency */
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            opacity: 0; /* Start hidden for animation */
+            transform: translateY(20px); /* Start slightly above */
+            animation: fadeIn 0.8s ease forwards; /* Fade-in animation */
+        }
 
-                   <div class="form-group">
-                       <label for="docNotes">Notes:</label>
-                       <textarea id="docNotes" rows="3"></textarea>
-                   </div>
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-                   <button type="submit" class="btn-primary">
-                       <i class="fas fa-save"></i> Save Document
-                   </button>
-               </form>
-           </section>
+        /* Auth Form Styles */
+        .auth-form h2 {
+            margin-bottom: 1rem;
+            color: #2c3e50; /* Dark color for headings */
+            text-align: center; /* Center align headings */
+        }
 
-           <section class="document-list">
-               <h2>Stored Documents</h2>
-               <div class="search-filter">
-                   <input type="text" id="searchInput" placeholder="Search documents...">
-                   <select id="filterSelect">
-                       <option value="ALL">All Document Types</option>
-                       <option value="DIR-12">DIR-12</option>
-                       <option value="MGT-14">MGT-14</option>
-                       <option value="INC-22">INC-22</option>
-                       <option value="AOC-4">AOC-4</option>
-                   </select>
-               </div>
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
 
-               <div id="documentTableContainer">
-                   <table id="documentTable">
-                       <thead>
-                           <tr>
-                               <th>Type</th>
-                               <th>Client/Company</th>
-                               <th>Date</th>
-                               <th>File Name</th>
-                               <th>Actions</th>
-                           </tr>
-                       </thead>
-                       <tbody id="documentList">
-                           <!-- Documents will be listed here -->
-                       </tbody>
-                   </table>
-               </div>
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #34495e; /* Darker color for labels */
+        }
 
-               <div id="noDocumentsMessage" class="empty-message">
-                   No documents found. Add your first document using the form above.
-               </div>
-           </section>
-       </main>
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s; /* Smooth transition */
+        }
 
-       <footer>
-           <p>CA Document Management System &copy; 2023</p>
-       </footer>
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db; /* Change border color on focus */
+        }
 
-       <script src="main.js"></script>
-   </body>
-   </html>
-   
+        .btn-primary {
+            background-color: #3498db; /* Button color */
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s; /* Smooth transition */
+            width: 100%; /* Full width button */
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9; /* Darker button color on hover */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            #auth-container {
+                width: 90%; /* Full width on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="auth-container">
+        <div class="auth-form">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+
+            <h2>Register</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Name:</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email:</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password:</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit" class="btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <main id="app-content" style="display:none;">
+        <!-- Your existing document management content goes here -->
+    </main>
+
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('preloader').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('preloader').style.display = 'none';
+                }, 500);
+            }, 1500); // Adjust delay as needed
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show the auth container with animation
+            const authContainer = document.getElementById('auth-container');
+            setTimeout(() => {
+                authContainer.style.opacity = '1'; // Ensure the container is visible
+            }, 100); // Delay to allow for CSS transition
+
+            // Handle login form submission
+            const loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Simulate successful login and redirect
+                // In a real application, you would validate the credentials here
+                window.location.href = 'index.html'; // Redirect to the dashboard
+            });
+
+            // Handle register form submission
+            const registerForm = document.getElementById('registerForm');
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Simulate successful registration
+                alert('Registration successful! You can now log in.');
+                registerForm.reset(); // Reset the form
+            });
+        });
+    </script>
+</body>
+</html>
