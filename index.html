@@ -12,7 +12,7 @@
         <h1><i class="fas fa-file-alt"></i> CA Document Repository</h1>
         <p>Store and manage all your Chartered Accountant documents in one place</p>
     </header>
-    
+
     <main>
         <section class="document-form">
             <h2>Add New Document</h2>
@@ -28,33 +28,37 @@
                         <option value="OTHER">Other Documents</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="clientName">Client/Company Name:</label>
                     <input type="text" id="clientName" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="docDate">Document Date:</label>
                     <input type="date" id="docDate" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="docFile">Upload Document:</label>
                     <input type="file" id="docFile" accept=".pdf,.doc,.docx,.xls,.xlsx" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="docNotes">Notes:</label>
                     <textarea id="docNotes" rows="3"></textarea>
                 </div>
-                
+
+                <button type="delete" class="btn-primary">
+                    <i class="fas fa-delete"></i> Delete Document
+                </button>
+
                 <button type="submit" class="btn-primary">
                     <i class="fas fa-save"></i> Save Document
                 </button>
             </form>
         </section>
-        
+
         <section class="document-list">
             <h2>Stored Documents</h2>
             <div class="search-filter">
@@ -67,7 +71,7 @@
                     <option value="AOC-4">AOC-4</option>
                 </select>
             </div>
-            
+
             <div id="documentTableContainer">
                 <table id="documentTable">
                     <thead>
@@ -75,6 +79,7 @@
                             <th>Type</th>
                             <th>Client/Company</th>
                             <th>Date</th>
+                            <th>File Name</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -83,51 +88,17 @@
                     </tbody>
                 </table>
             </div>
-            
+
             <div id="noDocumentsMessage" class="empty-message">
                 No documents found. Add your first document using the form above.
             </div>
         </section>
     </main>
-    
+
     <footer>
         <p>CA Document Management System &copy; 2023</p>
     </footer>
 
     <script src="main.js"></script>
-    <script>
-        (function() {
-            var ws = new WebSocket('ws://' + window.location.host +
-                '/jb-server-page?reloadMode=RELOAD_ON_SAVE&' +
-                'referrer=' + encodeURIComponent(window.location.pathname));
-            ws.onmessage = function (msg) {
-                if (msg.data === 'reload') {
-                    window.location.reload();
-                }
-                if (msg.data.startsWith('update-css ')) {
-                    var messageId = msg.data.substring(11);
-                    var links = document.getElementsByTagName('link');
-                    for (var i = 0; i < links.length; i++) {
-                        var link = links[i];
-                        if (link.rel !== 'stylesheet') continue;
-                        var clonedLink = link.cloneNode(true);
-                        var newHref = link.href.replace(/(&|\?)jbUpdateLinksId=\d+/, "$1jbUpdateLinksId=" + messageId);
-                        if (newHref !== link.href) {
-                            clonedLink.href = newHref;
-                        } else {
-                            var indexOfQuest = newHref.indexOf('?');
-                            if (indexOfQuest >= 0) {
-                                clonedLink.href = newHref.substring(0, indexOfQuest + 1) + 'jbUpdateLinksId=' + messageId + '&' +
-                                                  newHref.substring(indexOfQuest + 1);
-                            } else {
-                                clonedLink.href += '?' + 'jbUpdateLinksId=' + messageId;
-                            }
-                        }
-                        link.replaceWith(clonedLink);
-                    }
-                }
-            };
-        })();
-    </script>
 </body>
 </html>
