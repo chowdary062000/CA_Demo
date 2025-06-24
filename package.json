@@ -1,0 +1,16 @@
+   {
+     "name": "ca_demo",
+     "version": "1.0.0",
+     "description": "My project for CA Demo",
+     "scripts": {
+       "minify-css": "cleancss -o style.min.css style.css",
+       "minify-js": "uglifyjs main.js -o main.min.js -c -m",
+       "minify-all": "npm run minify-css && npm run minify-js",
+       "minify": "npm run minify-all"
+     },
+     "devDependencies": {
+       "clean-css-cli": "^5.6.2",
+       "uglify-js": "^3.17.4"
+     }
+   }
+   

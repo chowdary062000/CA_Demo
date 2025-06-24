@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${doc.type}</td>
                 <td>${doc.client}</td>
                 <td>${new Date(doc.date).toLocaleDateString()}</td>
+                <td>${doc.filename}</td>
                 <td>
                     <button class="delete-btn" title="Delete document">
                         <i class="fas fa-trash"></i>
